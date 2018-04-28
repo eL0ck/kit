@@ -15,6 +15,7 @@ script:
   - flake8 --ignore=E501
   - pytest
   - head template.yaml
+  - echo -e "Hello friend ..."
 before_deploy:
   - ci/build_deploy.sh
 deploy:
