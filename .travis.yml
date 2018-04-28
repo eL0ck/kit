@@ -1,22 +1,23 @@
 language: python
 branches:
-  only:  # safelist
-    - master
-    - dev
+  only:
+  - master
+  - dev
 python:
-  - "2.7"
-  - "3.4"
-  - "3.5"
-  - "3.6"
+- '2.7'
 install:
-  - pip install flake8
-  - pip install pytest
+- pip install flake8
+- pip install pytest
 script:
-  - flake8 --ignore=E501  # Lint Code
-  - pytest                # Test Code
-  - head template.yaml
+- flake8 --ignore=E501
+- pytest
+- head template.yaml
 deploy:
-  provider: script
-  script: c1/build_deploy.sh
+  provider: pypi
+  server: ${PYPI_URL}
+  user: tpj800
+  password:
+    secure: QJDkVPQaqy8QsRXzbAL6s3LR0ngQG8a53/OD12bbA9qj/atZ3IGc36TeZBZEQuRQVEm0U4ey49YIYSrMJso+RHs/e8AAzpksdSGO6z1Iq1qxpaR7HL6bBDLQcSZXUSoPeXeuZqf6o79JrRkomyccDuWGgJBXYqUiWL5c8YEfGdyQfVHofUh8ztlquhScaAaXKJxM0vdtqkxUyDVBBbWk71uxvNn1oN5FqRJzNmetBi7/CybPMywmJabAZQHX891s1cbCbY7ZvTciPxvE7EkfZnXSyOrCN5eIUzuu82wWhCmoV1GabzCLcAnaL+BfJ1iarY8H1yHOnb21OSDIbHQ5kwcfQC3DAXQvMRlwIx87UVZSxLFAP5My4sSN3qYl/7dKQ3D7UKCN+DJoMFQ6DbzNHr1Dqaa1glZ4DEj4PvPvtV29leN9s1Z1DdVcHlTp5EUCaE6k/aQU/KflW60tGOhwwB3aZWg8p76A88VOzVXF9XPVOpqQIXqf+icpeNv18B0PVsE4ZirFC/fdx043W1FdfpyWJp5PsMKVzdRiIzvcxmMOUmTg65Xk1VXUEyt3aDfkqSt2vR/+FOQjCir0urTfSyH10nHa37LtFmkdAzqyV7WIG47xYCeh5tAkVRbcTIknZlWvwKshQFalNZlom1i37AmjJcVUpecDtg3NnD4zO6o=
   on:
     branch: dev
+  distributions: "sdist bdist_wheel"
