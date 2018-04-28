@@ -2,6 +2,7 @@ language: python
 branches:
   only:  # safelist
     - master
+    - dev
 python:
   - "2.7"
   - "3.4"
