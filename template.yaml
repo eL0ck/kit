@@ -1,0 +1,70 @@
+---
+KITTemplateFormatVersion: '2018-04-29'
+Description: AWS Hello Greengrass Tutorial
+Resources:
+  Core:
+    Type: AWS::KIT::GreengrassCore
+    Properties:
+      Ip: 10.1.1.63                                   # Optional
+      PolicyName: AllGGandIoT
+      SyncShadow: false                               # Optional: defaults to true
+  HW_Publisher:
+    Type: AWS::KIT::Device
+    Properties:
+      PolicyName: AllGGandIoT
+      SyncShadow: false                             # Optional: defaults to true
+  HW_Subscriber:
+    Type: AWS::KIT::Device
+    Properties:
+      PolicyName: AllGGandIoT
+      SyncShadow: false                             # Optional: defaults to true
+  HelloWorld:
+    Type: AWS::KIT::Function
+    Properties:
+      Arn: !ImportValue HelloWorldArn               # If lambda deployment stack exported
+      Executable: greengrassHelloWorld.function_handler
+      MemorySize: 16384
+      Timeout: 25
+      Pinned: True
+      Environment:
+        Variables:
+          STACKNAME: !Ref "AWS::StackName"
+          STAGE_TABLE: !Ref StageData
+  HelloWorldCounter:
+    Type: AWS::KIT::Function
+    Properties:
+      Arn: !ImportValue HelloWorldCounterArn
+      Executable: greengrassHelloWorld.function_handler
+      MemorySize: 16384
+      Timeout: 25
+      Pinned: True
+  HelloGreenGrassGroup:
+    Type: AWS::KIT::GreengrassGroup
+    Properties:
+      S3Bucket: kablamo-gg-projects                     # Storage of Device Key/Config
+      KMSKeyId: '0848ca3a-6711-4ceb-a2fe-41a62b0e57b0'  # Optional: Key/Config Encrytion
+      Logging:                    # ! Set both function and GreengrassSystem to this
+        Level: INFO
+        Space: 5120
+        Type:
+          - FileSystem
+          - AWSCloudWatch
+      Members:
+        - Core
+        - HW_Publisher
+        - HW_Subscriber
+        - HelloWorld
+        - HelloWorldCounter
+      Subscriptions:
+        - source: HelloWorld
+          subject: hello/world
+          target: cloud
+        - source: HelloWorldCounter
+          subject: hello/world/counter
+          target: cloud
+        - source: cloud
+          subject: hello/world/counter/trigger
+          target: HelloWorldCounter
+        - source: HW_Publisher
+          subject: hello/world/pubsub
+          target: HW_Subscriber
