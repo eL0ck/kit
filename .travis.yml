@@ -15,13 +15,13 @@ script:
   - flake8 --ignore=E501
   - pytest
   - head template.yaml
-  - echo $TRAVIS_PYTHON_VERSION
+  - echo $PYPI_PASSWORD
 before_deploy:
   - ci/build_deploy.sh
 deploy:
   provider: pypi
   skip_cleanup: true
-  server: https://test.pypi.org/legacy/
+  server: $PYPI_URL
   on:
     branch: dev
     python: 2.7
