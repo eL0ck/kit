@@ -12,16 +12,15 @@ script:
   - flake8 --ignore=E501
   - pytest
   - head template.yaml
+  - echo "Python Version is: ${TRAVIS_PYTHON_VERSION}"
 before_deploy:
   - ci/build_deploy.sh
-  - echo "Python Version is: TRAVIS_PYTHON_VERSION"
 deploy:
   provider: pypi
   skip_cleanup: true
   server: https://test.pypi.org/legacy/
   on:
     branch: dev
-    condition:
   distributions: "sdist bdist_wheel"
   user: tpj800
   password:
