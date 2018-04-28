@@ -15,3 +15,8 @@ script:
   - flake8 --ignore=E501  # Lint Code
   - pytest                # Test Code
   - head template.yaml
+deploy:
+  provider: script
+  script: c1/build_deploy.sh
+  on:
+    branch: dev
