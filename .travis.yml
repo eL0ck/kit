@@ -8,7 +8,7 @@ python:
   - "3.5"
   - "3.6"
 install:
-  - pip install numpy
+  - pip install flake8
   - pip install pytest
 script:
   - pytest
