@@ -5,6 +5,9 @@ branches:
     - dev
 python:
   - '2.7'
+  - '3.4'
+  - '3.5'
+  - '3.6'
 install:
   - pip install flake8
   - pip install pytest
@@ -12,7 +15,7 @@ script:
   - flake8 --ignore=E501
   - pytest
   - head template.yaml
-  - echo "Python Version is: ${TRAVIS_PYTHON_VERSION}"
+  - echo $TRAVIS_PYTHON_VERSION
 before_deploy:
   - ci/build_deploy.sh
 deploy:
@@ -21,6 +24,7 @@ deploy:
   server: https://test.pypi.org/legacy/
   on:
     branch: dev
+    python: 2.7
   distributions: "sdist bdist_wheel"
   user: tpj800
   password:
